@@ -7,6 +7,15 @@ Content-Type: application/json
 }
 
 ###
+POST https://flashcards-server-silk.vercel.app/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "test"
+}
+
+###
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 

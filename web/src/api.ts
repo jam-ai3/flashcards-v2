@@ -2,7 +2,9 @@ import axios from "axios";
 import { GenerateResponse, GenerateType, Product, User } from "./types";
 
 const SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
+  process.env.NODE_ENV === "production"
+    ? "https://flashcards-server-silk.vercel.app"
+    : "http://localhost:3000";
 
 const PYTHON_SERVER_URL =
   process.env.NODE_ENV === "production" ? "" : "http://127.0.0.1:5000";
