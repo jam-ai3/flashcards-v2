@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useMutation } from "../../../hooks/api-call";
 import { api } from "../../../api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import Toast from "../../../components/toast/toast";
+// import Toast from "../../../components/toast/toast";
 
 export default function ForgotPassword() {
   const { id } = useParams();
@@ -45,7 +45,7 @@ export default function ForgotPassword() {
           Reset Password
         </button>
       </div>
-      <Toast message={reset.error} state="error" onClear={reset.resetError} />
+      {/* <Toast message={reset.error} state="error" onClear={reset.resetError} /> */}
     </main>
   );
 }
