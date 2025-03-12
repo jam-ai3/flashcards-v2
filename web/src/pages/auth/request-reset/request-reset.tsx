@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "../../../hooks/api-call";
 import { api } from "../../../api";
-import Toast from "../../../components/toast/toast";
+// import Toast from "../../../components/toast/toast";
 
 export default function RequestReset() {
   const [email, setEmail] = useState("");
@@ -23,11 +23,11 @@ export default function RequestReset() {
           Reset Password
         </button>
       </div>
-      <Toast
+      {/* <Toast
         message={request.error}
         state="error"
         onClear={request.resetError}
-      />
+      /> */}
     </main>
   );
 }
