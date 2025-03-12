@@ -1,0 +1,45 @@
+.toast {
+  --right: 2em;
+
+  position: fixed;
+  bottom: 4em;
+  right: var(--right);
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+  translate: calc(100% + var(--right)) 0;
+  transition: translate 0.2s ease-in-out;
+  color: var(--primary);
+  background-color: var(--background-secondary);
+  border: thin solid var(--border);
+}
+
+.show {
+  translate: 0 0;
+}
+
+.error {
+  background-color: var(--danger);
+  border-color: var(--danger-secondary);
+}
+
+.warning {
+  background-color: var(--warning);
+  border-color: var(--warning-secondary);
+}
+
+.success {
+  background-color: var(--accent);
+  border-color: var(--accent-secondary);
+}
+
+.info {
+  background-color: var(--background-secondary);
+  border-color: var(--border);
+}
+
+.close {
+  cursor: pointer;
+}

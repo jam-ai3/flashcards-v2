@@ -1,0 +1,40 @@
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "test"
+}
+
+###
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "name": "test",
+  "password": "test"
+}
+
+###
+POST http://localhost:3000/protected/generate
+Content-Type: application/json
+Authorization: Bearer db69b71a-6e31-41ef-9df4-a96dfceeec29
+
+{
+  "type": "courseInfo",
+  "courseInfo": {
+    "university": "University of South Carolina",
+    "department": "Computer Science",
+    "courseNumber": "CSCE 355",
+    "courseName": "Foundations of Computation"
+  }
+}
+
+###
+POST http://localhost:5000/pdf
+Content-Type: application/json
+
+{
+  "pdf": ""
+}
