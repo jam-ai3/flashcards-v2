@@ -15,7 +15,6 @@ export default function Login() {
 
   async function handleLogin() {
     const res = await login(email, password);
-    console.log(res);
     if (res) {
       setError(res);
     }

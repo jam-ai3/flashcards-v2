@@ -65,9 +65,6 @@ export const turso = {
       if (rs.rows.length === 0) {
         return { code: 401, message: "No user with this email" };
       }
-      // if (rs.rows[0].confirmation_code !== null) {
-      //   return { code: 401, message: "Please confirm your email" };
-      // }
       const passwordsMatch = await comparePasswords(
         password,
         rs.rows[0].password as string
@@ -84,7 +81,6 @@ export const turso = {
         id: rs.rows[0].id as string,
         name: rs.rows[0].name as string,
         email: rs.rows[0].email as string,
-        token: newToken,
         createdAt: rs.rows[0].created_at as number,
         updatedAt: rs.rows[0].updated_at as number,
         subscriptionStart: rs.rows[0].subscription_start as number | null,
@@ -128,7 +124,6 @@ export const turso = {
               name,
               email,
               password,
-              token,
               confirmation_code,
               created_at,
               updated_at,
@@ -136,14 +131,13 @@ export const turso = {
               free_generates
             )
           VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `,
         args: [
           id,
           name,
           email,
           hashedPassword,
-          token,
           code,
           currentTime,
           currentTime,
@@ -154,13 +148,10 @@ export const turso = {
       if (rs2.rowsAffected !== 1) {
         return { code: 500, message: "Failed to register user" };
       }
-      // await sendEmail(email, "Confirmation Code", code);
-      // return code;
       return {
         id,
         name,
         email,
-        token,
         createdAt: currentTime,
         updatedAt: currentTime,
         subscriptionStart: null,
@@ -174,56 +165,19 @@ export const turso = {
     }
   },
 
-  // activate: async (code: string): Promise<TursoResponse<User>> => {
-  //   try {
-  //     const rs = await client.execute({
-  //       sql: `
-  //         UPDATE users
-  //         SET confirmation_code = NULL
-  //         WHERE confirmation_code = ?
-  //         RETURNING *
-  //         `,
-  //       args: [code],
-  //     });
-  //     if (rs.rows.length === 0) {
-  //       return { code: 404, message: "No active code with this code" };
-  //     }
-  //     const user: User = {
-  //       id: rs.rows[0].id as string,
-  //       name: rs.rows[0].name as string,
-  //       email: rs.rows[0].email as string,
-  //       token: rs.rows[0].token as string,
-  //       createdAt: rs.rows[0].created_at as number,
-  //       updatedAt: rs.rows[0].updated_at as number,
-  //       subscriptionStart: rs.rows[0].subscription_start as number | null,
-  //       subscriptionEnd: rs.rows[0].subscription_end as number | null,
-  //       paidGenerates: rs.rows[0].paid_generates as number,
-  //       freeGenerates: rs.rows[0].free_generates as number,
-  //     };
-  //     return user;
-  //   } catch (error) {
-  //     console.error(error);
-  //     return { code: 500, message: "Failed to activate code" };
-  //   }
-  // },
-
-  loginWithToken: async (token: string): Promise<TursoResponse<User>> => {
+  loginWithUserId: async (userId: string): Promise<TursoResponse<User>> => {
     try {
       const rs = await client.execute({
-        sql: "SELECT * FROM users WHERE token = ?",
-        args: [token],
+        sql: "SELECT * FROM users WHERE id = ?",
+        args: [userId],
       });
       if (rs.rows.length === 0) {
         return { code: 401, message: "No user with this token" };
       }
-      // if (rs.rows[0].confirmation_code !== null) {
-      //   return { code: 401, message: "Please confirm your email" };
-      // }
       const user: User = {
         id: rs.rows[0].id as string,
         name: rs.rows[0].name as string,
         email: rs.rows[0].email as string,
-        token: rs.rows[0].token as string,
         createdAt: rs.rows[0].created_at as number,
         updatedAt: rs.rows[0].updated_at as number,
         subscriptionStart: rs.rows[0].subscription_start as number | null,
@@ -237,42 +191,6 @@ export const turso = {
       return { code: 500, message: "Failed to fetch user" };
     }
   },
-
-  // getUserIdFromEmail: async (email: string): Promise<TursoResponse<string>> => {
-  //   try {
-  //     const rs = await client.execute({
-  //       sql: "SELECT id FROM users WHERE email = ?",
-  //       args: [email],
-  //     });
-  //     if (rs.rows.length === 0) {
-  //       return { code: 404, message: "No user with this email" };
-  //     }
-  //     return rs.rows[0].id as string;
-  //   } catch (error) {
-  //     console.error(error);
-  //     return { code: 500, message: "Failed to fetch user" };
-  //   }
-  // },
-
-  // resetPassword: async (
-  //   userId: string,
-  //   password: string
-  // ): Promise<TursoResponse<string>> => {
-  //   try {
-  //     const hashedPassword = await hashPassword(password);
-  //     const rs = await client.execute({
-  //       sql: "UPDATE users SET password = ? WHERE id = ?",
-  //       args: [hashedPassword, userId],
-  //     });
-  //     if (rs.rowsAffected === 0) {
-  //       return { code: 404, message: "No user with this id" };
-  //     }
-  //     return "Success";
-  //   } catch (error) {
-  //     console.error(error);
-  //     return { code: 500, message: "Failed to reset password" };
-  //   }
-  // },
 
   logout: async (token: string): Promise<TursoResponse<string>> => {
     try {
@@ -419,7 +337,6 @@ CREATE TABLE IF NOT EXISTS users (
   name TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
-  token TEXT UNIQUE,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL,
   subscription_start INTEGER,

@@ -16,7 +16,6 @@ export default function Register() {
 
   async function handleRegister() {
     const res = await register(name, email, password);
-    console.log(res);
     if (res) {
       setError(res);
     }

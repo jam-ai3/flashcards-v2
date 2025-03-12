@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { isError, turso } from "../database";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET, SESSION_KEY } from "../routes/auth";
+import { Session } from "../types";
 
 export async function errorBoundary(
   req: Request,
@@ -14,16 +16,20 @@ export async function errorBoundary(
   }
 }
 
-export function getToken(req: Request): string | null {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return null;
-  }
-  const token = authHeader.split(" ")[1];
+export function getSession(req: Request): Session | null {
+  const token = req.cookies[SESSION_KEY];
   if (!token) {
     return null;
   }
-  return token;
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (!decoded) {
+      return null;
+    }
+    return decoded as Session;
+  } catch {
+    return null;
+  }
 }
 
 export async function authenticate(
@@ -31,19 +37,19 @@ export async function authenticate(
   res: Response,
   next: NextFunction
 ) {
-  const token = getToken(req);
+  const token = req.cookies[SESSION_KEY];
   if (!token) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
-  const user = await turso.loginWithToken(token);
-  if (isError(user)) {
-    res.status(user.code).json({ message: user.message });
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.session = decoded as Session;
+    next();
+  } catch {
+    res.status(401).json({ message: "Unauthorized" });
     return;
   }
-  req.isSubscribed = isSubscribed(user.subscriptionEnd);
-  req.user = user;
-  next();
 }
 
 export function isSubscribed(subscriptionEnd: number | null) {

@@ -1,9 +1,13 @@
 import { Router } from "express";
 import { isError, turso } from "../database";
-import { errorBoundary, getToken } from "../utils/middleware";
+import { errorBoundary, getSession } from "../utils/middleware";
+import jwt from "jsonwebtoken";
 // import { sendEmail } from "../utils/email";
 
 const router = Router();
+
+export const JWT_SECRET = process.env.JWT_SECRET ?? "flashcards-secret";
+export const SESSION_KEY = process.env.SESSION_KEY ?? "flashcards-session-id";
 
 router.post("/login", async (req, res: any) => {
   errorBoundary(req, res, async (req, res) => {
@@ -12,17 +16,24 @@ router.post("/login", async (req, res: any) => {
     if (isError(user)) {
       return res.status(user.code).json({ message: user.message });
     }
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET);
+    res.cookie(SESSION_KEY, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: undefined,
+    });
     return res.status(200).json(user);
   });
 });
 
 router.get("/login", async (req, res) => {
   errorBoundary(req, res, async (req, res) => {
-    const token = getToken(req);
-    if (!token) {
+    const session = getSession(req);
+    if (!session) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const user = await turso.loginWithToken(token);
+    const user = await turso.loginWithUserId(session.userId);
     if (isError(user)) {
       return res.status(user.code).json({ message: user.message });
     }
@@ -37,6 +48,13 @@ router.post("/register", async (req, res) => {
     if (isError(user)) {
       return res.status(user.code).json({ message: user.message });
     }
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET);
+    res.cookie(SESSION_KEY, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: undefined,
+    });
     return res.status(200).json(user);
   });
 });
@@ -81,15 +99,8 @@ router.post("/register", async (req, res) => {
 
 router.delete("/logout", async (req, res) => {
   errorBoundary(req, res, async (req, res) => {
-    const token = getToken(req);
-    if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-    const user = await turso.logout(token);
-    if (isError(user)) {
-      return res.status(user.code).json({ message: user.message });
-    }
-    return res.status(200).json(user);
+    res.clearCookie(SESSION_KEY);
+    return res.status(200).json({ message: "Logout successful" });
   });
 });
 

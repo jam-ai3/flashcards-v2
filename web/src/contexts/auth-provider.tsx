@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { api, TOKEN_KEY } from "../api";
+import { api } from "../api";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/spinner/spinner";
 import { User } from "../types";
@@ -45,10 +45,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   async function login(email: string, password: string) {
     try {
       const res = await api.login(email, password);
-      if (res.data.token) {
-        localStorage.setItem(TOKEN_KEY, res.data.token);
-        setUser(res.data);
-      }
+      setUser(res.data);
     } catch (err: any) {
       console.error(err);
       return err.response?.data?.message ?? err.message;
@@ -60,10 +57,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   async function register(name: string, email: string, password: string) {
     try {
       const res = await api.register(name, email, password);
-      if (res.data.token) {
-        localStorage.setItem(TOKEN_KEY, res.data.token);
-        setUser(res.data);
-      }
+      setUser(res.data);
     } catch (err: any) {
       console.error(err);
       return err.response?.data?.message ?? err.message;
@@ -86,7 +80,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   function logout() {
     setUser(null);
-    localStorage.removeItem(TOKEN_KEY);
   }
 
   return (

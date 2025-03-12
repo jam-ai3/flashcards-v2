@@ -2,7 +2,6 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  token: string;
   createdAt: number;
   updatedAt: number;
   subscriptionStart: number | null;
@@ -59,9 +58,12 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
+export type Session = {
+  userId: string;
+};
+
 declare module "express-serve-static-core" {
   interface Request {
-    user: User;
-    isSubscribed: boolean;
+    session: Session;
   }
 }

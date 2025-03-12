@@ -14,6 +14,7 @@ const server = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 const pythonServer = axios.create({
@@ -21,16 +22,6 @@ const pythonServer = axios.create({
   headers: {
     "Content-Type": "multipart/form-data",
   },
-});
-
-export const TOKEN_KEY = "flashcards-token";
-
-server.interceptors.request.use((req) => {
-  const token = localStorage.getItem(TOKEN_KEY);
-  if (token) {
-    req.headers.Authorization = `Bearer ${token}`;
-  }
-  return req;
 });
 
 export const api = {

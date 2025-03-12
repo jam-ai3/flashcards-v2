@@ -31,7 +31,6 @@ export default function Home() {
       } else if (args.pptx !== undefined && args.inputFormat === "pptx") {
         text = (await api.parsePptx(args.pptx)).data;
       }
-      console.log(text);
       if (text === undefined) {
         // handle error
         return setFlashcards({
