@@ -192,22 +192,6 @@ export const turso = {
     }
   },
 
-  logout: async (token: string): Promise<TursoResponse<string>> => {
-    try {
-      const rs = await client.execute({
-        sql: "UPDATE users SET token = NULL WHERE token = ?",
-        args: [token],
-      });
-      if (rs.rowsAffected === 0) {
-        return { code: 404, message: "No user with this token" };
-      }
-      return "Success";
-    } catch (error) {
-      console.error(error);
-      return { code: 500, message: "Failed to logout user" };
-    }
-  },
-
   subscribe: async (
     userId: string,
     duration: number

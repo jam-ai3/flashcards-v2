@@ -2,9 +2,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { config } from "dotenv";
 import { CourseInfo, GenerateType, RawFlashcard } from "../types";
 import { v4 } from "uuid";
+import { GEMINI_API_KEY } from "./constants";
 config();
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 export const gemini = {

@@ -1,12 +1,11 @@
-import e, { Router } from "express";
+import { Router } from "express";
 import { errorBoundary, isSubscribed } from "../utils/middleware";
 import { gemini } from "../utils/gemini";
 import { isError, turso, TursoResponse } from "../database";
 import { GenerateType, PaymentType, User } from "../types";
+import { FREE_GENERATE_LIMIT } from "../utils/constants";
 
 const router = Router();
-
-const FREE_GENERATE_LIMIT = 4;
 
 router.post("/", async (req, res) => {
   errorBoundary(req, res, async (req, res) => {

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { errorBoundary } from "../utils/middleware";
-import { PRODUCTS } from "../types";
+import { PRODUCTS } from "../utils/constants";
 
 const router = Router();
 

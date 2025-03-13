@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { api } from "../../api";
 import { formatPrice } from "../../helpers";
 import { useQuery } from "../../hooks/api-call";
@@ -10,6 +10,12 @@ export default function Product() {
     query: async () => (await api.fetchProducts()).data,
   });
 
+  async function handleBuy(productId: string) {
+    const url = await api.createStripeSession(productId);
+    console.log(url);
+    window.location.href = url.data;
+  }
+
   return (
     <main className={styles.main}>
       <div className={styles["product-row"]}>
@@ -20,9 +26,15 @@ export default function Product() {
               <h2 className={styles.name}>{p.name}</h2>
               <p className={styles.description}>{p.description}</p>
             </div>
-            <Link to={p.url} className={styles["buy-btn"]}>
+            {/* <Link to={p.url} className={styles["buy-btn"]}>
               Buy Now
-            </Link>
+            </Link> */}
+            <button
+              className={styles["buy-btn"]}
+              onClick={() => handleBuy(p.id)}
+            >
+              Buy Now
+            </button>
           </div>
         ))}
       </div>

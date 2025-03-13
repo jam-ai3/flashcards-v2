@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET, SESSION_KEY } from "../routes/auth";
 import { Session } from "../types";
+import { JWT_SECRET, SESSION_KEY } from "./constants";
 
 export async function errorBoundary(
   req: Request,

@@ -84,4 +84,8 @@ export const api = {
   fetchProducts: async () => {
     return server.get<Product[]>("/protected/product");
   },
+
+  createStripeSession: async (productId: string) => {
+    return server.get<string>(`/stripe/${productId}`);
+  },
 };

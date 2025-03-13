@@ -2,12 +2,10 @@ import { Router } from "express";
 import { isError, turso } from "../database";
 import { errorBoundary, getSession } from "../utils/middleware";
 import jwt from "jsonwebtoken";
+import { JWT_SECRET, SESSION_KEY } from "../utils/constants";
 // import { sendEmail } from "../utils/email";
 
 const router = Router();
-
-export const JWT_SECRET = process.env.JWT_SECRET ?? "flashcards-secret";
-export const SESSION_KEY = process.env.SESSION_KEY ?? "flashcards-session-id";
 
 router.post("/login", async (req, res: any) => {
   errorBoundary(req, res, async (req, res) => {
