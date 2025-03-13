@@ -7,9 +7,11 @@ export const PORT = process.env.PORT ?? 3000;
 export const JWT_SECRET = process.env.JWT_SECRET ?? "flashcards-secret";
 export const SESSION_KEY = process.env.SESSION_KEY ?? "flashcards-session-id";
 export const FREE_GENERATE_LIMIT = 4;
-export const STRIPE_API_KEY = process.env.STRIPE_API_KEY ?? "";
-export const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET ?? "";
-export const GEMINI_API_KEY = process.env.GEMINI_API_KEY ?? "";
+export const STRIPE_API_KEY = process.env.STRIPE_API_KEY;
+export const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+export const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+export const DATABASE_URL = process.env.DATABASE_URL;
+export const DATABASE_API_KEY = process.env.DATABASE_API_KEY;
 
 export const PRODUCTS: Product[] = [
   {
@@ -17,18 +19,21 @@ export const PRODUCTS: Product[] = [
     name: "Single Generate",
     description: "A one-time purchase of a single use of flashcards generator",
     priceInPennies: 99,
+    isSubscription: false,
   },
   {
     id: "price_1QzURjEkbD2Tq5Z29eLJ8Zvv",
     name: "Monthly Subscription",
     description: "Unlimited use of flashcards generator for a one-month period",
     priceInPennies: 799,
+    isSubscription: true,
   },
   {
     id: "price_1QzUSBEkbD2Tq5Z2t0J0BgTM",
     name: "Yearly Subscription",
     description: "Unlimited use of flashcards generator for a one-year period",
     priceInPennies: 7999,
+    isSubscription: true,
   },
 ];
 

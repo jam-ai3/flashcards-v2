@@ -31,6 +31,7 @@ export type Product = {
   name: string;
   description: string;
   priceInPennies: number;
+  isSubscription: boolean;
 };
 
 export type Session = {

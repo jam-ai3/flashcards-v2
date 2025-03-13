@@ -1,13 +1,9 @@
 import { createClient } from "@libsql/client";
-import { config } from "dotenv";
 import { User } from "./types";
 import bcrypt from "bcrypt";
 import { v4 } from "uuid";
+import { DATABASE_URL, DATABASE_API_KEY } from "./utils/constants";
 // import { sendEmail } from "./utils/email";
-config();
-
-const DATABASE_URL = process.env.DATABASE_URL;
-const DATABASE_API_KEY = process.env.DATABASE_API_KEY;
 
 if (!DATABASE_URL || !DATABASE_API_KEY) {
   throw new Error("DATABASE_URL and DATABASE_API_KEY must be set");
@@ -51,7 +47,7 @@ function generateConfirmationCode(): string {
 }
 
 export const turso = {
-  // User
+  // Auth
 
   login: async (
     email: string,
@@ -192,6 +188,8 @@ export const turso = {
     }
   },
 
+  // Pay
+
   subscribe: async (
     userId: string,
     duration: number
@@ -260,6 +258,8 @@ export const turso = {
     }
   },
 
+  // Generate
+
   usePaidGenerate: async (userId: string): Promise<TursoResponse<string>> => {
     try {
       const rs = await client.execute({
@@ -291,6 +291,8 @@ export const turso = {
       return { code: 500, message: "Failed to use generate" };
     }
   },
+
+  // Misc
 
   deleteUser: async (userId: string): Promise<TursoResponse<string>> => {
     try {
