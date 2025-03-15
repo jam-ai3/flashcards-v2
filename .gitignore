@@ -31,3 +31,4 @@ wheels/
 .venv
 venv/
 ENV/
+.vercel
