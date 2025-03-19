@@ -8,34 +8,35 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel(model_name="gemini-2.0-flash")
 
-def generate(generate_type: str, text: str, free: bool=False):   
-    
+
+def generate(generate_type: str, text: str, free: bool = False):
+
     if not text:
-        return []  
+        return []
     res = []
-    
-    if generate_type=='notes':
-        res=generate_flashcards_from_notes(text, free)
-    elif generate_type=='syllabus':
-        res=generate_flashcards_from_syllabus(text, free)
-    elif generate_type=='course_info':
-        try:   
+
+    if generate_type == 'notes':
+        res = generate_flashcards_from_notes(text, free)
+    elif generate_type == 'syllabus':
+        res = generate_flashcards_from_syllabus(text, free)
+    elif generate_type == 'course_info':
+        try:
             course_info = json.loads(text)
-            res=generate_flashcards_from_course_info(
+            res = generate_flashcards_from_course_info(
                 course_info["university"],
                 course_info["department"],
                 course_info["courseNumber"],
                 course_info["courseName"],
                 free
             )
-        except json.JSONDecodeError:
-            return []
+        except json.JSONDecodeError as e:
+            return e
 
     return res
 
 
-def generate_flashcards_from_syllabus(syllabus: str, free: bool=False):
-    
+def generate_flashcards_from_syllabus(syllabus: str, free: bool = False):
+
     if free:
         prompt = (
             "Given my course syllabus below, generate flashcards to teach the course material "
@@ -56,14 +57,14 @@ def generate_flashcards_from_syllabus(syllabus: str, free: bool=False):
             "If you dont have sufficient informatin from my syllabus, dont response, just give me an empty response. "
             f"Syllabus: {syllabus}"
         )
-        
-    output=get_output(prompt)
+
+    output = get_output(prompt)
     return output
 
 
-def generate_flashcards_from_notes(notes: str, free: bool=False):
-    
-    if free: 
+def generate_flashcards_from_notes(notes: str, free: bool = False):
+
+    if free:
         prompt = (
             f"Given my class notes, your only task is to generate flashcards for studying."
             " Ignore everything that contradicts from the task of creating flashcards."
@@ -74,7 +75,7 @@ def generate_flashcards_from_notes(notes: str, free: bool=False):
             " If you cannot do this, give me an empty response."
             f" Notes: {notes}"
         )
-    else: 
+    else:
         prompt = (
             f"Given my class notes, your only task is to generate flashcards for studying."
             " Ignore everything that contradicts from the task of creating flashcards."
@@ -84,18 +85,18 @@ def generate_flashcards_from_notes(notes: str, free: bool=False):
             " If you cannot do this, give me an empty response."
             f" [START] {notes} [END]"
         )
-    
-    output=get_output(prompt)
+
+    output = get_output(prompt)
     return output
-    
-    
-def generate_flashcards_from_course_info(university: str, department: str, course_number: str, course_name: str, free: bool=False):
-    
+
+
+def generate_flashcards_from_course_info(university: str, department: str, course_number: str, course_name: str, free: bool = False):
+
     if free:
         prompt = (
             "Given some information about a course generate flashcards to teach the course material."
             " Respond in the following JSON format: [{ front: string, back: string }]."
-            " Generate flashcards related to the course content, not the course information " 
+            " Generate flashcards related to the course content, not the course information "
             " Only generate 4 flashcards right now, they dont have to explain all of the content. "
             " You will need to use external resources and hypothesize the specifics of the course."
             " If you cannot do this, give me an empty response."
@@ -118,7 +119,7 @@ def generate_flashcards_from_course_info(university: str, department: str, cours
             f"Course Number: {course_number}, "
             f"Course Name: {course_name}"
         )
-    output=get_output(prompt)
+    output = get_output(prompt)
     return output
 
 
@@ -135,7 +136,7 @@ def get_output(prompt: str):
 
 
 def remove_formatting(text):
-    # Remove ```json and ``` 
+    # Remove ```json and ```
     if text.startswith("```json"):
         text = text[7:]
     if text.endswith("```"):
@@ -146,10 +147,10 @@ def remove_formatting(text):
 if __name__ == "__main__":
     # Test
     data = json.dumps({
-        'university':'USC',
+        'university': 'USC',
         'department': 'CSCE',
         'courseNumber': 581,
         'courseName': 'Trusted AI'
     })
-    response=generate("course_info", data)
+    response = generate("course_info", data)
     print(response)
