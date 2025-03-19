@@ -1,9 +1,9 @@
 # pdf conversion endpoint
 from flask import jsonify, request
 from flask_cors import cross_origin
-from util.pdf_extractor import PdfParser
-from util.pptx_extractor import get_text_from_pptx
-from util.generator.gemini import generate
+from utils.pdf_extractor import PdfParser
+from utils.pptx_extractor import get_text_from_pptx
+from utils.gemini import generate
 
 
 class PdfConversionEndpoint:
