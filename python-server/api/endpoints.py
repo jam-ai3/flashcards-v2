@@ -21,9 +21,9 @@ class PdfConversionEndpoint:
                 parser = PdfParser(pdf_binary_data)
                 extracted_text = parser.get_all_text_without_chapters()
                 return jsonify(extracted_text)
-            except:
+            except Exception as e:
                 print("Error processing PDF file")
-                return jsonify({"error": "Failed to process PDF file"}), 500
+                return jsonify({"error": "Failed to process PDF file", "devError": str(e)}), 500
 
 
 class PptxConversionEndpoint:
@@ -39,9 +39,9 @@ class PptxConversionEndpoint:
             try:
                 extracted_text = get_text_from_pptx(pptx_binary_data)
                 return jsonify(extracted_text)
-            except:
+            except Exception as e:
                 print("Error processing PPTX file")
-                return jsonify({"error": "Failed to process PPTX file"}), 500
+                return jsonify({"error": "Failed to process PPTX file", "devError": str(e)}), 500
 
 
 class GenerateFlashcardsEndpoint:

@@ -16,7 +16,7 @@ model User {
   updatedAt     DateTime @updatedAt
   freeGenerates Int      @default(4)
   paidGenerates Int      @default(0)
-  isAdmin       Boolean  @default(false)
+  isAdmin       Boolean  @default(false) // NEW
 
   subscriptions Subscription[]
   groups        FlashcardGroup[]
@@ -40,7 +40,9 @@ model FlashcardGroup {
   createdAt   DateTime @default(now())
   prompt      String
   error       String?
-  paymentType String?
+  paymentType String
+  inputType   String
+  inputFormat String
 
   userId String
 

@@ -12,7 +12,7 @@ model = genai.GenerativeModel(model_name="gemini-2.0-flash")
 def generate(generate_type: str, text: str, free: bool = False):
 
     if not text:
-        return []
+        return {"error": "No provided input text"}
     res = []
 
     if generate_type == 'notes':
@@ -30,7 +30,7 @@ def generate(generate_type: str, text: str, free: bool = False):
                 free
             )
         except json.JSONDecodeError as e:
-            return e
+            return {"error": "Invalid input format", "devError": str(e)}
 
     return res
 
@@ -58,8 +58,7 @@ def generate_flashcards_from_syllabus(syllabus: str, free: bool = False):
             f"Syllabus: {syllabus}"
         )
 
-    output = get_output(prompt)
-    return output
+    return get_output(prompt)
 
 
 def generate_flashcards_from_notes(notes: str, free: bool = False):
@@ -86,8 +85,7 @@ def generate_flashcards_from_notes(notes: str, free: bool = False):
             f" [START] {notes} [END]"
         )
 
-    output = get_output(prompt)
-    return output
+    return get_output(prompt)
 
 
 def generate_flashcards_from_course_info(university: str, department: str, course_number: str, course_name: str, free: bool = False):
@@ -119,8 +117,7 @@ def generate_flashcards_from_course_info(university: str, department: str, cours
             f"Course Number: {course_number}, "
             f"Course Name: {course_name}"
         )
-    output = get_output(prompt)
-    return output
+    return get_output(prompt)
 
 
 def get_output(prompt: str):
@@ -132,7 +129,7 @@ def get_output(prompt: str):
         return json_output
     except Exception as e:
         print(f"Error:{e}")
-        return []
+        return {"error": "Failed to generate flashcards", "devError": str(e)}
 
 
 def remove_formatting(text):

@@ -22,6 +22,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useActionState, useState } from "react";
 import { handleGenerate } from "../_actions/generate";
+import { Error } from "@/lib/utils";
 
 export type InputType = "notes" | "syllabus" | "courseInfo";
 export type InputFormat = "text" | "pdf" | "pptx";
@@ -38,7 +39,7 @@ type GenerateError = {
   department?: string[];
   courseNumber?: string[];
   courseName?: string[];
-  message?: string;
+  error?: string;
 };
 
 type GenerateFormProps = {
@@ -101,8 +102,8 @@ export default function GenerateForm({ userId }: GenerateFormProps) {
           <Button type="submit" className="mt-6">
             Generate
           </Button>
-          {(error as any).message && (
-            <p className="text-destructive">{(error as any).message}</p>
+          {(error as Error).error && (
+            <p className="text-destructive">{(error as Error).error}</p>
           )}
         </form>
       </CardContent>

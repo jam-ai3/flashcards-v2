@@ -34,6 +34,7 @@ export async function handleLogin(_: unknown, data: FormData) {
     email: user.email,
     freeGenerates: user.freeGenerates,
     paidGenerates: user.paidGenerates,
+    isAdmin: user.isAdmin,
   });
 
   (await cookies()).set({
@@ -74,6 +75,7 @@ export async function handleRegister(_: unknown, data: FormData) {
     email: newUser.email,
     freeGenerates: newUser.freeGenerates,
     paidGenerates: newUser.paidGenerates,
+    isAdmin: newUser.isAdmin,
   });
 
   (await cookies()).set({

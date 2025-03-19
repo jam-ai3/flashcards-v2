@@ -6,9 +6,9 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main>
+    <main className="flex flex-col h-screen">
       <AdminHeader />
-      <div className="p-4">{children}</div>
+      <div className="p-4 h-full">{children}</div>
     </main>
   );
 }
