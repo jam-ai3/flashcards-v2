@@ -2,7 +2,7 @@ from util.pptx_extractor import get_text_from_pptx
 from util.pdf_extractor import PdfParser
 from flask import Flask, jsonify
 from flask import request
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import os
 import sys
 
@@ -16,6 +16,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 @app.route('/pptx', methods=['POST'])
+@cross_origin(origins="*")
 def pptx_conversion():
     pptx_file = request.files['pptx']
     # CAN CAUSE MEMORY ISSUES
@@ -30,6 +31,7 @@ def pptx_conversion():
 
 
 @app.route('/pdf', methods=['POST'])
+@cross_origin(origins="*")
 def pdf_conversion():
     print("Received request to convert PDF")
     pdf_file = request.files["pdf"]
