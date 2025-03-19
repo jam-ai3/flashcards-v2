@@ -30,3 +30,19 @@ wheels/
 .venv
 venv/
 ENV/
+.vercel
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.npm
+.yarn
+.yarn-integrity
+.eslintcache
+.node_repl_history
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
