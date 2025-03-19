@@ -46,6 +46,7 @@ def pdf_conversion():
         print("Error processing PDF file")
         return jsonify({"error": "Failed to process PDF file"}), 500
 
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+# app = app.wsgi_app
+wsgi_app = app
+# if __name__ == "__main__":
+#     app.run(debug=True, port=5000)

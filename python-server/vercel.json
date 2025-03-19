@@ -1,0 +1,10 @@
+{
+    "version": 2,
+ 
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "python-server/routes/server.py"
+        }
+    ]
+}
