@@ -110,13 +110,10 @@ async function parseFile(file: File, format: "pdf" | "pptx") {
   try {
     const formData = new FormData();
     formData.append(format, file);
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_PYTHON_SERVER_URL}/${format}`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const res = await fetch(`${process.env.PYTHON_SERVER_URL}/${format}`, {
+      method: "POST",
+      body: formData,
+    });
     if (!res.ok) {
       // TODO: replace with server error
       return { message: "Failed to parse file" };
@@ -171,42 +168,43 @@ async function generateFlashcards(
   text: string,
   paymentType: PaymentType
 ) {
-  const testFlashcards = [
-    {
-      front: "What is the capital of France?",
-      back: "Paris",
-    },
-    {
-      front: "What is the capital of Germany?",
-      back: "Berlin",
-    },
-    {
-      front: "What is the capital of Italy?",
-      back: "Rome",
-    },
-    {
-      front: "What is the capital of Spain?",
-      back: "Madrid",
-    },
-  ];
-  // try {
-  // const res = await fetch(`${process.env.PYTHON_SERVER_URL}/generate`, {
-  //   method: "POST",
-  //   body: JSON.stringify({ inputType, text, paymentType }),
-  //   headers: {
-  //     Authorization: `Bearer ${process.env.PYTHON_SERVER_API_KEY}`,
+  // const testFlashcards = [
+  //   {
+  //     front: "What is the capital of France?",
+  //     back: "Paris",
   //   },
-  // });
-  // if (!res.ok()) {
-  // // TODO: replace with server error
-  //   return { message: "Failed to generate flashcards" };
-  // }
-  // return await res.json();
-  // } catch (error) {
-  //   console.error(error);
-  //   return { message: "Failed to generate flashcards" };
-  // }
-  return testFlashcards;
+  //   {
+  //     front: "What is the capital of Germany?",
+  //     back: "Berlin",
+  //   },
+  //   {
+  //     front: "What is the capital of Italy?",
+  //     back: "Rome",
+  //   },
+  //   {
+  //     front: "What is the capital of Spain?",
+  //     back: "Madrid",
+  //   },
+  // ];
+  try {
+    const res = await fetch(`${process.env.PYTHON_SERVER_URL}/generate`, {
+      method: "POST",
+      body: JSON.stringify({ inputType, text, isFree: paymentType === "free" }),
+      headers: {
+        Authorization: `Bearer ${process.env.PYTHON_SERVER_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!res.ok) {
+      // TODO: replace with server error
+      return { message: "Failed to generate flashcards" };
+    }
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+    return { message: "Failed to generate flashcards" };
+  }
+  // return testFlashcards;
 }
 
 type RawFlashcard = {
