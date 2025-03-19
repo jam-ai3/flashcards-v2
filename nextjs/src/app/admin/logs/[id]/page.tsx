@@ -6,8 +6,6 @@ type LogPageProps = {
   };
 };
 
-// TODO: give more descriptive errors in _actions
-
 export default async function LogPage({ params }: LogPageProps) {
   const { id } = await params;
   const group = await db.flashcardGroup.findUnique({ where: { id } });

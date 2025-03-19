@@ -11,8 +11,7 @@ type TableNavigationProps = {
 };
 
 export default function TableNavigation({ page, total }: TableNavigationProps) {
-  const hasMore = page * 10 < total;
-  const count = Math.max(page * LOGS_PER_PAGE, total);
+  const hasMore = page * LOGS_PER_PAGE < total;
 
   function handleNext() {
     if (hasMore) {
@@ -37,7 +36,7 @@ export default function TableNavigation({ page, total }: TableNavigationProps) {
         <span>Previous</span>
       </Button>
       <p className="text-center text-muted-foreground">
-        {count} / {total}
+        {page} / {Math.ceil(total / LOGS_PER_PAGE)}
       </p>
       <Button
         onClick={handleNext}

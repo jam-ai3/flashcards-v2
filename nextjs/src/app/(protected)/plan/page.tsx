@@ -1,16 +1,11 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import db from "@/db/db";
 import useSession from "@/hooks/useSession";
 import { formatNumber } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import ProductCard from "./_components/product-card";
 import { PRODUCTS_ARRAY } from "@/lib/constants";
+import { Label } from "@/components/ui/label";
+import { ReactNode } from "react";
 
 export default async function PlanPage() {
   const session = await useSession();
@@ -26,24 +21,28 @@ export default async function PlanPage() {
     <div className="flex h-full gap-4">
       <section className="flex-1/2 h-full flex flex-col gap-4">
         <h2 className="font-semibold text-xl">Your Plan</h2>
-        <div className="bg-secondary rounded-md shadow p-4 h-full">
-          <div className="grid grid-cols-2 gap-2">
-            <InformationCard title="Account" description="">
-              <p>Email - {user.email}</p>
-            </InformationCard>
-            <InformationCard title="Single Generates" description="">
-              <p>{formatNumber(user.freeGenerates)} free</p>
-              <p>{formatNumber(user.paidGenerates)} paid</p>
-            </InformationCard>
-            <InformationCard title="Subscription" description="">
-              <p>Subscription Plan - {subscription?.type ?? "None"}</p>
-              <p>
-                Expires -{" "}
-                {subscription?.expiresAt.toLocaleDateString() ?? "N/A"}
-              </p>
-              <p>Generates Used - {subscription?.generatesUsed ?? "N/A"}</p>
-            </InformationCard>
-          </div>
+        <div className="bg-secondary rounded-md shadow p-4 h-full space-y-6">
+          <InfoLine label="Email" value={user.email} />
+          <InfoLine
+            label="Paid Generates"
+            value={formatNumber(user.paidGenerates)}
+          />
+          <InfoLine
+            label="Free Generates"
+            value={formatNumber(user.freeGenerates)}
+          />
+          <InfoLine
+            label="Subscription Plan"
+            value={subscription?.type ?? "None"}
+          />
+          <InfoLine
+            label="Expires"
+            value={subscription?.expiresAt.toLocaleDateString() ?? "N/A"}
+          />
+          <InfoLine
+            label="Generates Used"
+            value={subscription?.generatesUsed ?? "N/A"}
+          />
         </div>
       </section>
       <section className="flex-1/2 h-full flex flex-col gap-4">
@@ -63,24 +62,16 @@ export default async function PlanPage() {
   );
 }
 
-type InformationCardProps = {
-  title: string;
-  description: string;
-  children: React.ReactNode;
+type InfoLineProps = {
+  label: string;
+  value: ReactNode;
 };
 
-function InformationCard({
-  title,
-  description,
-  children,
-}: InformationCardProps) {
+function InfoLine({ label, value }: InfoLineProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-    </Card>
+    <div className="space-y-2">
+      <Label className="font-semibold">{label}</Label>
+      <p className="rounded-md border-2 p-2">{value}</p>
+    </div>
   );
 }

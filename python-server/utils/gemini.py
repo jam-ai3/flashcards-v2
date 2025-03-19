@@ -19,9 +19,10 @@ def generate(generate_type: str, text: str, free: bool = False):
         res = generate_flashcards_from_notes(text, free)
     elif generate_type == 'syllabus':
         res = generate_flashcards_from_syllabus(text, free)
-    elif generate_type == 'course_info':
+    elif generate_type == 'courseInfo':
         try:
             course_info = json.loads(text)
+            print(course_info)
             res = generate_flashcards_from_course_info(
                 course_info["university"],
                 course_info["department"],
@@ -31,6 +32,8 @@ def generate(generate_type: str, text: str, free: bool = False):
             )
         except json.JSONDecodeError as e:
             return {"error": "Invalid input format", "devError": str(e)}
+    else:
+        return {"error": "Invalid input type", "devError": f"Unrecognized input type: {generate_type}"}
 
     return res
 
@@ -117,13 +120,16 @@ def generate_flashcards_from_course_info(university: str, department: str, cours
             f"Course Number: {course_number}, "
             f"Course Name: {course_name}"
         )
+
     return get_output(prompt)
 
 
 def get_output(prompt: str):
     # TODO: Improve error handling
+    print(prompt)
     try:
         response = model.generate_content(prompt)
+        print(response.text)
         output = remove_formatting(response.text.strip())
         json_output = json.loads(output)
         return json_output

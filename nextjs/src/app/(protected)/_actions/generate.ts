@@ -91,7 +91,12 @@ async function formatText(
   if (format === "text") {
     text =
       inputType === "courseInfo"
-        ? JSON.stringify(data)
+        ? JSON.stringify({
+            university: data.university,
+            department: data.department,
+            courseNumber: data.courseNumber,
+            courseName: data.courseName,
+          })
         : inputType === "notes"
         ? data.notesText
         : data.syllabusText;
@@ -124,8 +129,11 @@ async function parseFile(
       body: formData,
     });
     if (!res.ok) {
-      // TODO: replace with server error
-      return { error: "Failed to parse file" };
+      const json = await res.json();
+      return {
+        error: "Failed to parse file",
+        devError: json.devError ?? json.error,
+      };
     }
     return await res.json();
   } catch (error) {
@@ -188,7 +196,10 @@ async function generateFlashcards(
     });
     if (!res.ok) {
       const json = await res.json();
-      return { error: "Failed to generate flashcards", devError: json.error };
+      return {
+        error: "Failed to generate flashcards",
+        devError: json.devError ?? json.error,
+      };
     }
     return await res.json();
   } catch (error) {

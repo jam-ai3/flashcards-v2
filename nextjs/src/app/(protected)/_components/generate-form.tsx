@@ -23,9 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useActionState, useState } from "react";
 import { handleGenerate } from "../_actions/generate";
 import { Error } from "@/lib/utils";
-
-export type InputType = "notes" | "syllabus" | "courseInfo";
-export type InputFormat = "text" | "pdf" | "pptx";
+import { InputFormat, InputType } from "@/lib/types";
 
 type GenerateError = {
   format?: string[];

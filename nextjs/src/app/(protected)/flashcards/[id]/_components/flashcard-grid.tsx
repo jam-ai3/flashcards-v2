@@ -110,7 +110,7 @@ function formatPaymentString(paymentType: string | null) {
   switch (paymentType) {
     case "free":
       return "Flashcards generated with free trial";
-    case "paid":
+    case "single":
       return "Flashcards generated with single payment";
     case "subscription":
       return "Flashcards generated with subscription";
