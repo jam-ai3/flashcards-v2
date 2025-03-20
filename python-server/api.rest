@@ -19,6 +19,16 @@ Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryABC123
 ------WebKitFormBoundaryABC123
 Content-Disposition: form-data; name="pptx"; filename="test.pptx"
 Content-Type: application/vnd.openxmlformats-officedocument.presentationml.presentation
+ 
+< ./test.pptx
+------WebKitFormBoundary--
 
-< ./path/to/your/test.pptx
-------WebKitFormBoundaryABC123--
+###
+POST https://python-server-rosy.vercel.app/generate
+Content-Type: application/json
+
+{
+  "inputType": "course_info",
+  "text": "{\"university\": \"USC\", \"department\": \"CSCE\", \"courseNumber\": 581, \"courseName\": \"Trusted AI\"}",
+  "isFree": false
+}

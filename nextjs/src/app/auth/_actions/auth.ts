@@ -2,6 +2,7 @@
 
 import db from "@/db/db";
 import { hashPassword, signToken, verifyPassword } from "@/lib/auth";
+import { AUTH_REDIRECT_PATH } from "@/lib/constants";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -34,6 +35,7 @@ export async function handleLogin(_: unknown, data: FormData) {
     email: user.email,
     freeGenerates: user.freeGenerates,
     paidGenerates: user.paidGenerates,
+    isAdmin: user.isAdmin,
   });
 
   (await cookies()).set({
@@ -44,7 +46,7 @@ export async function handleLogin(_: unknown, data: FormData) {
     sameSite: "strict",
   });
 
-  redirect("/");
+  redirect(AUTH_REDIRECT_PATH);
 }
 
 export async function handleRegister(_: unknown, data: FormData) {
@@ -74,6 +76,7 @@ export async function handleRegister(_: unknown, data: FormData) {
     email: newUser.email,
     freeGenerates: newUser.freeGenerates,
     paidGenerates: newUser.paidGenerates,
+    isAdmin: newUser.isAdmin,
   });
 
   (await cookies()).set({
@@ -84,5 +87,5 @@ export async function handleRegister(_: unknown, data: FormData) {
     sameSite: "strict",
   });
 
-  redirect("/");
+  redirect(AUTH_REDIRECT_PATH);
 }

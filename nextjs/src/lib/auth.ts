@@ -7,6 +7,7 @@ type User = {
   email: string;
   freeGenerates: number;
   paidGenerates: number;
+  isAdmin: boolean;
 };
 
 export async function signToken(payload: User) {

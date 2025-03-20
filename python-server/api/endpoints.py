@@ -13,7 +13,6 @@ class PdfConversionEndpoint:
         @app.route('/pdf', methods=['POST'])
         @cross_origin(origins="*")
         def pdf_conversion():
-            print("Received request to convert PDF")
             pdf_file = request.files["pdf"]
             pdf_binary_data = pdf_file.stream.read()
             extracted_text = ""
@@ -21,9 +20,8 @@ class PdfConversionEndpoint:
                 parser = PdfParser(pdf_binary_data)
                 extracted_text = parser.get_all_text_without_chapters()
                 return jsonify(extracted_text)
-            except:
-                print("Error processing PDF file")
-                return jsonify({"error": "Failed to process PDF file"}), 500
+            except Exception as e:
+                return jsonify({"error": "Failed to process PDF file", "devError": str(e)}), 500
 
 
 class PptxConversionEndpoint:
@@ -39,9 +37,8 @@ class PptxConversionEndpoint:
             try:
                 extracted_text = get_text_from_pptx(pptx_binary_data)
                 return jsonify(extracted_text)
-            except:
-                print("Error processing PPTX file")
-                return jsonify({"error": "Failed to process PPTX file"}), 500
+            except Exception as e:
+                return jsonify({"error": "Failed to process PPTX file", "devError": str(e)}), 500
 
 
 class GenerateFlashcardsEndpoint:

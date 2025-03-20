@@ -1,5 +1,6 @@
 import db from "@/db/db";
 import useSession from "@/hooks/useSession";
+import { AUTH_REDIRECT_PATH } from "@/lib/constants";
 import { redirect } from "next/navigation";
 
 export default async function AuthLayout({
@@ -12,5 +13,5 @@ export default async function AuthLayout({
   const user = await db.user.findUnique({ where: { id: session?.id } });
   if (!user) return children;
 
-  return redirect("/");
+  return redirect(AUTH_REDIRECT_PATH);
 }

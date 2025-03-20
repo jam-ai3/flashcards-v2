@@ -5,11 +5,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function isError<T>(
-  response: T | { message: string }
-): response is { message: string } {
+export type Error = {
+  error: string;
+  devError?: string;
+};
+
+export function isError<T>(response: T | Error): response is Error {
   return (
-    typeof response === "object" && response !== null && "message" in response
+    typeof response === "object" && response !== null && "error" in response
   );
 }
 

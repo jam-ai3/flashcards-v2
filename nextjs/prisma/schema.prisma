@@ -40,7 +40,9 @@ model FlashcardGroup {
   createdAt   DateTime @default(now())
   prompt      String
   error       String?
-  paymentType String?
+  paymentType String
+  inputType   String
+  inputFormat String
 
   userId String
 

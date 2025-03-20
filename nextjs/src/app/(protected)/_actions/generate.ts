@@ -1,9 +1,9 @@
 "use server";
 
 import { z } from "zod";
-import { InputType } from "../_components/generate-form";
+import { InputFormat, InputType } from "../_components/generate-form";
 import db from "@/db/db";
-import { isError } from "@/lib/utils";
+import { Error, isError } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
 const generateSchema = z.object({
@@ -67,7 +67,8 @@ export async function handleGenerate(
     text,
     userId,
     paymentType,
-    isError(cards) ? cards.message : undefined
+    inputType,
+    result.data.format
   );
 
   // return if error generating cards
@@ -84,29 +85,42 @@ export async function handleGenerate(
 async function formatText(
   inputType: InputType,
   data: z.infer<typeof generateSchema>
-) {
+): Promise<string | Error> {
   const format = data.format;
+  let text;
   if (format === "text") {
-    return inputType === "courseInfo"
-      ? JSON.stringify(data)
-      : inputType === "notes"
-      ? data.notesText
-      : data.syllabusText;
+    text =
+      inputType === "courseInfo"
+        ? JSON.stringify({
+            university: data.university,
+            department: data.department,
+            courseNumber: data.courseNumber,
+            courseName: data.courseName,
+          })
+        : inputType === "notes"
+        ? data.notesText
+        : data.syllabusText;
   } else {
     if (data.notesPdf) {
-      return await parseFile(data.notesPdf, format);
+      text = await parseFile(data.notesPdf, format);
     } else if (data.notesPptx) {
-      return await parseFile(data.notesPptx, format);
+      text = await parseFile(data.notesPptx, format);
     } else if (data.syllabusPdf) {
-      return await parseFile(data.syllabusPdf, format);
+      text = await parseFile(data.syllabusPdf, format);
     } else if (data.syllabusPptx) {
-      return await parseFile(data.syllabusPptx, format);
+      text = await parseFile(data.syllabusPptx, format);
     }
   }
-  return { message: "Invalid input format" };
+  if (text === undefined) {
+    return { error: "Invalid input format" };
+  }
+  return text;
 }
 
-async function parseFile(file: File, format: "pdf" | "pptx") {
+async function parseFile(
+  file: File,
+  format: "pdf" | "pptx"
+): Promise<string | Error> {
   try {
     const formData = new FormData();
     formData.append(format, file);
@@ -115,19 +129,22 @@ async function parseFile(file: File, format: "pdf" | "pptx") {
       body: formData,
     });
     if (!res.ok) {
-      // TODO: replace with server error
-      return { message: "Failed to parse file" };
+      const json = await res.json();
+      return {
+        error: "Failed to parse file",
+        devError: json.devError ?? json.error,
+      };
     }
     return await res.json();
   } catch (error) {
     console.error(error);
-    return { message: "Failed to parse file" };
+    return { error: "Failed to parse file" };
   }
 }
 
 async function getPaymentOptions(
   userId: string
-): Promise<PaymentResult | { message: string }> {
+): Promise<PaymentResult | Error> {
   const [subscription, user] = await Promise.all([
     db.subscription.findUnique({
       where: { userId },
@@ -140,7 +157,7 @@ async function getPaymentOptions(
   ]);
 
   if (!user) {
-    return { message: "User not found" };
+    return { error: "User not found" };
   }
 
   return {
@@ -152,7 +169,7 @@ async function getPaymentOptions(
   };
 }
 
-function getPaymentType(payment: PaymentResult) {
+function getPaymentType(payment: PaymentResult): PaymentType | Error {
   if (payment.subscriptionType) {
     return "subscription";
   } else if (payment.paidGenerates > 0) {
@@ -160,32 +177,14 @@ function getPaymentType(payment: PaymentResult) {
   } else if (payment.freeGenerates > 0) {
     return "free";
   }
-  return { message: "No payment options available" };
+  return { error: "No payment options available" };
 }
 
 async function generateFlashcards(
   inputType: InputType,
   text: string,
   paymentType: PaymentType
-) {
-  // const testFlashcards = [
-  //   {
-  //     front: "What is the capital of France?",
-  //     back: "Paris",
-  //   },
-  //   {
-  //     front: "What is the capital of Germany?",
-  //     back: "Berlin",
-  //   },
-  //   {
-  //     front: "What is the capital of Italy?",
-  //     back: "Rome",
-  //   },
-  //   {
-  //     front: "What is the capital of Spain?",
-  //     back: "Madrid",
-  //   },
-  // ];
+): Promise<RawFlashcard[] | Error> {
   try {
     const res = await fetch(`${process.env.PYTHON_SERVER_URL}/generate`, {
       method: "POST",
@@ -196,15 +195,20 @@ async function generateFlashcards(
       },
     });
     if (!res.ok) {
-      // TODO: replace with server error
-      return { message: "Failed to generate flashcards" };
+      const json = await res.json();
+      return {
+        error: "Failed to generate flashcards",
+        devError: json.devError ?? json.error,
+      };
     }
     return await res.json();
   } catch (error) {
     console.error(error);
-    return { message: "Failed to generate flashcards" };
+    return {
+      error: "Failed to generate flashcards",
+      devError: "Server failed to generate response",
+    };
   }
-  // return testFlashcards;
 }
 
 type RawFlashcard = {
@@ -213,32 +217,49 @@ type RawFlashcard = {
 };
 
 async function createFlashcards(
-  cards: RawFlashcard[],
+  cards: RawFlashcard[] | Error,
   prompt: string,
   userId: string,
   paymentType: PaymentType,
-  error?: string
+  inputType: InputType,
+  inputFormat: InputFormat
 ) {
-  const group = await db.flashcardGroup.create({
-    data: {
-      userId,
-      prompt,
-      paymentType,
-      error,
-    },
-  });
-  let flashcards;
-  if (!error) {
-    flashcards = await db.flashcard.createMany({
+  if (isError(cards)) {
+    const group = await db.flashcardGroup.create({
+      data: {
+        userId,
+        prompt,
+        paymentType,
+        inputType,
+        inputFormat,
+        error: cards.devError ?? cards.error,
+      },
+    });
+    return { group, flashcards: undefined };
+  }
+  const groupId = crypto.randomUUID();
+  const [group, flashcards] = await Promise.all([
+    db.flashcardGroup.create({
+      data: {
+        id: groupId,
+        userId,
+        prompt,
+        paymentType,
+        inputType,
+        inputFormat,
+        error: undefined,
+      },
+    }),
+    db.flashcard.createMany({
       data: [
-        ...cards.map((card) => ({
+        ...cards.map((card): any => ({
           front: card.front,
           back: card.back,
-          groupId: group.id,
+          groupId: groupId,
         })),
       ],
-    });
-  }
+    }),
+  ]);
   return { group, flashcards };
 }
 
