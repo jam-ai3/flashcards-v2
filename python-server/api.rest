@@ -3,22 +3,22 @@ GET http://localhost:3000
 
 ### Test PDF endpoint
 POST http://localhost:3000/pdf
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
- 
-------WebKitFormBoundary
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryABC123
+
+------WebKitFormBoundaryABC123
 Content-Disposition: form-data; name="pdf"; filename="test.pdf"
 Content-Type: application/pdf
- 
-< ./test.pdf
-------WebKitFormBoundary--
+
+< ./path/to/your/test.pdf
+------WebKitFormBoundaryABC123--
 
 ### Test PPTX endpoint
 POST http://localhost:3000/pptx
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
- 
-------WebKitFormBoundary
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryABC123
+
+------WebKitFormBoundaryABC123
 Content-Disposition: form-data; name="pptx"; filename="test.pptx"
 Content-Type: application/vnd.openxmlformats-officedocument.presentationml.presentation
- 
-< ./test.pptx
-------WebKitFormBoundary--
+
+< ./path/to/your/test.pptx
+------WebKitFormBoundaryABC123--
