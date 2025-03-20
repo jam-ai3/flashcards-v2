@@ -62,9 +62,20 @@ export default function GenerateForm({ userId }: GenerateFormProps) {
     }
   }
 
+  function getDescription() {
+    switch (inputType) {
+      case "notes":
+        return "Upload a pdf, powerpoint, or just paste your notes to generate flashcards";
+      case "syllabus":
+        return "Upload a pdf, powerpoint, or just paste your syllabus to generate flashcards";
+      case "courseInfo":
+        return "Enter some information about your course to generate flashcards";
+    }
+  }
+
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="space-y-2">
         <CardTitle className="flex justify-between items-center">
           <span>Information</span>
           <div className="flex gap-2">
@@ -88,11 +99,7 @@ export default function GenerateForm({ userId }: GenerateFormProps) {
             </Button>
           </div>
         </CardTitle>
-        <CardDescription>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Error commodi
-          facere voluptatum libero aperiam delectus sunt, possimus repudiandae
-          alias recusandae?
-        </CardDescription>
+        <CardDescription>{getDescription()}</CardDescription>
       </CardHeader>
       <CardContent>
         <form action={action} className="flex flex-col gap-2">

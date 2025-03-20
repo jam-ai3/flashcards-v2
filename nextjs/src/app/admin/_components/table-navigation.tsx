@@ -1,27 +1,33 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { LOGS_PER_PAGE } from "@/lib/constants";
+import { TABLE_ROWS_PER_PAGE } from "@/lib/constants";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { redirect } from "next/navigation";
 
 type TableNavigationProps = {
   page: number;
   total: number;
+  route: string;
 };
 
-export default function TableNavigation({ page, total }: TableNavigationProps) {
-  const hasMore = page * LOGS_PER_PAGE < total;
+export default function TableNavigation({
+  page,
+  total,
+  route,
+}: TableNavigationProps) {
+  const hasMore = page * TABLE_ROWS_PER_PAGE < total;
+  const pages = Math.ceil(total / TABLE_ROWS_PER_PAGE);
 
   function handleNext() {
     if (hasMore) {
-      redirect(`/admin/logs?page=${page + 1}`);
+      redirect(`${route}?page=${page + 1}`);
     }
   }
 
   function handlePrevious() {
     if (page > 1) {
-      redirect(`/admin/logs?page=${page - 1}`);
+      redirect(`${route}?page=${page - 1}`);
     }
   }
 
@@ -36,7 +42,7 @@ export default function TableNavigation({ page, total }: TableNavigationProps) {
         <span>Previous</span>
       </Button>
       <p className="text-center text-muted-foreground">
-        {page} / {Math.ceil(total / LOGS_PER_PAGE)}
+        {Math.min(page, pages)} / {pages}
       </p>
       <Button
         onClick={handleNext}

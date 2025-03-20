@@ -1,9 +1,5 @@
-import { Loader2 } from "lucide-react";
+import Loading from "@/components/loading";
 
 export default function LoadingPage() {
-  return (
-    <div className="flex items-center justify-center h-full">
-      <Loader2 size={32} className="animate-spin" />
-    </div>
-  );
+  return <Loading />;
 }

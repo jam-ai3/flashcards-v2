@@ -13,9 +13,8 @@ export default async function HomePage() {
       <section className="flex flex-col gap-4 justify-center items-center">
         <h2 className="font-semibold text-2xl">Generate flashcards</h2>
         <p className="text-center w-3/4 text-muted-foreground">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente
-          voluptatum corrupti porro libero magnam provident aliquam nisi animi
-          deserunt quis.
+          Upload your notes, syllabus, or some information about your course to
+          get started generating flashcards.
         </p>
       </section>
       <section className="grid items-center">

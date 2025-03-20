@@ -4,8 +4,7 @@ import { formatNumber } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import ProductCard from "./_components/product-card";
 import { PRODUCTS_ARRAY } from "@/lib/constants";
-import { Label } from "@/components/ui/label";
-import { ReactNode } from "react";
+import InfoLine from "@/components/info-line";
 
 export default async function PlanPage() {
   const session = await useSession();
@@ -21,7 +20,7 @@ export default async function PlanPage() {
     <div className="flex h-full gap-4">
       <section className="flex-1/2 h-full flex flex-col gap-4">
         <h2 className="font-semibold text-xl">Your Plan</h2>
-        <div className="bg-secondary rounded-md shadow p-4 h-full space-y-6">
+        <div className="h-full space-y-6">
           <InfoLine label="Email" value={user.email} />
           <InfoLine
             label="Paid Generates"
@@ -58,20 +57,6 @@ export default async function PlanPage() {
           ))}
         </div>
       </section>
-    </div>
-  );
-}
-
-type InfoLineProps = {
-  label: string;
-  value: ReactNode;
-};
-
-function InfoLine({ label, value }: InfoLineProps) {
-  return (
-    <div className="space-y-2">
-      <Label className="font-semibold">{label}</Label>
-      <p className="rounded-md border-2 p-2">{value}</p>
     </div>
   );
 }

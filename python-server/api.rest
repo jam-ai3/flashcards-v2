@@ -22,3 +22,13 @@ Content-Type: application/vnd.openxmlformats-officedocument.presentationml.prese
  
 < ./test.pptx
 ------WebKitFormBoundary--
+
+###
+POST https://python-server-rosy.vercel.app/generate
+Content-Type: application/json
+
+{
+  "inputType": "course_info",
+  "text": "{\"university\": \"USC\", \"department\": \"CSCE\", \"courseNumber\": 581, \"courseName\": \"Trusted AI\"}",
+  "isFree": false
+}

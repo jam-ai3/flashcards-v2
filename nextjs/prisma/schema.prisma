@@ -16,7 +16,7 @@ model User {
   updatedAt     DateTime @updatedAt
   freeGenerates Int      @default(4)
   paidGenerates Int      @default(0)
-  isAdmin       Boolean  @default(false) // NEW
+  isAdmin       Boolean  @default(false)
 
   subscriptions Subscription[]
   groups        FlashcardGroup[]
