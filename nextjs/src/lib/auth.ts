@@ -24,7 +24,6 @@ export async function verifyToken(token: string) {
     });
     return payload as User;
   } catch (error) {
-    console.error("JWT Error:", error);
     return null;
   }
 }

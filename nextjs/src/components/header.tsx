@@ -1,6 +1,9 @@
+import useSession from "@/hooks/useSession";
 import Link from "next/link";
 
 export default async function Header() {
+  const session = await useSession();
+
   return (
     <nav className="flex justify-between">
       <Link href="/">
@@ -9,12 +12,20 @@ export default async function Header() {
         </h1>
       </Link>
       <div className="flex gap-8">
-        <Link href="/groups">
-          <span className="text-primary">Flashcards</span>
-        </Link>
-        <Link href="/plan">
-          <span className="text-primary">Plan</span>
-        </Link>
+        {session ? (
+          <>
+            <Link href="/groups">
+              <span className="text-primary">Flashcards</span>
+            </Link>
+            <Link href="/plan">
+              <span className="text-primary">Plan</span>
+            </Link>
+          </>
+        ) : (
+          <Link href="/auth/login">
+            <span className="text-primary">Login</span>
+          </Link>
+        )}
       </div>
     </nav>
   );

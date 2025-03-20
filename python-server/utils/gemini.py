@@ -22,7 +22,6 @@ def generate(generate_type: str, text: str, free: bool = False):
     elif generate_type == 'courseInfo':
         try:
             course_info = json.loads(text)
-            print(course_info)
             res = generate_flashcards_from_course_info(
                 course_info["university"],
                 course_info["department"],
@@ -126,15 +125,12 @@ def generate_flashcards_from_course_info(university: str, department: str, cours
 
 def get_output(prompt: str):
     # TODO: Improve error handling
-    print(prompt)
     try:
         response = model.generate_content(prompt)
-        print(response.text)
         output = remove_formatting(response.text.strip())
         json_output = json.loads(output)
         return json_output
     except Exception as e:
-        print(f"Error:{e}")
         return {"error": "Failed to generate flashcards", "devError": str(e)}
 
 
