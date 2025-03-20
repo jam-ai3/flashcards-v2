@@ -3,14 +3,14 @@ import useSession from "@/hooks/useSession";
 import { formatNumber } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import ProductCard from "./_components/product-card";
-import { PRODUCTS_ARRAY } from "@/lib/constants";
+import { PRODUCTS_ARRAY, UNAUTH_REDIRECT_PATH } from "@/lib/constants";
 import InfoLine from "@/components/info-line";
 
 export default async function PlanPage() {
   const session = await useSession();
-  if (!session) redirect("/auth/login");
+  if (!session) redirect(UNAUTH_REDIRECT_PATH);
   const user = await db.user.findUnique({ where: { id: session.id } });
-  if (!user) redirect("/auth/login");
+  if (!user) redirect(UNAUTH_REDIRECT_PATH);
   const subscription = await db.subscription.findUnique({
     where: { userId: session.id },
   });
