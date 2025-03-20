@@ -16,7 +16,9 @@ export default function AdminHeader() {
           <Link href="/admin">
             <span
               className={
-                pathname === "/admin" ? "text-primary" : "text-muted-foreground"
+                pathname === "/admin"
+                  ? "text-primary font-semibold"
+                  : "text-muted-foreground"
               }
             >
               Dashboard
@@ -28,7 +30,7 @@ export default function AdminHeader() {
             <span
               className={
                 pathname === "/admin/customers"
-                  ? "text-primary"
+                  ? "text-primary font-semibold"
                   : "text-muted-foreground"
               }
             >
@@ -41,7 +43,7 @@ export default function AdminHeader() {
             <span
               className={
                 pathname === "/admin/sales"
-                  ? "text-primary"
+                  ? "text-primary font-semibold"
                   : "text-muted-foreground"
               }
             >
@@ -54,7 +56,7 @@ export default function AdminHeader() {
             <span
               className={
                 pathname === "/admin/logs"
-                  ? "text-primary"
+                  ? "text-primary font-semibold"
                   : "text-muted-foreground"
               }
             >

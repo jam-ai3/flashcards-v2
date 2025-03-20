@@ -1,4 +1,7 @@
 import { jwtVerify, SignJWT } from "jose";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { AUTH_REDIRECT_PATH } from "./constants";
 
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET!);
 

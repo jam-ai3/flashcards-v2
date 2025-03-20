@@ -24,7 +24,6 @@ import { useActionState, useState } from "react";
 import { handleGenerate } from "../_actions/generate";
 import { Error } from "@/lib/utils";
 import { InputFormat, InputType } from "@/lib/types";
-import { useFormStatus } from "react-dom";
 
 type GenerateError = {
   format?: string[];

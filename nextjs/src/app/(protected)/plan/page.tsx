@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import ProductCard from "./_components/product-card";
 import { PRODUCTS_ARRAY, UNAUTH_REDIRECT_PATH } from "@/lib/constants";
 import InfoLine from "@/components/info-line";
+import { Label } from "@/components/ui/label";
+import LogoutBtn from "./_components/logout-btn";
 
 export default async function PlanPage() {
   const session = await useSession();
@@ -42,6 +44,7 @@ export default async function PlanPage() {
             label="Generates Used"
             value={subscription?.generatesUsed ?? "N/A"}
           />
+          <LogoutBtn />
         </div>
       </section>
       <section className="flex-1/2 h-full flex flex-col gap-4">
