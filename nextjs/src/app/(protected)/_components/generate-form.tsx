@@ -24,6 +24,7 @@ import { useActionState, useState } from "react";
 import { handleGenerate } from "../_actions/generate";
 import { Error } from "@/lib/utils";
 import { InputFormat, InputType } from "@/lib/types";
+import { useFormStatus } from "react-dom";
 
 type GenerateError = {
   format?: string[];
@@ -104,9 +105,7 @@ export default function GenerateForm({ userId }: GenerateFormProps) {
       <CardContent>
         <form action={action} className="flex flex-col gap-2">
           {renderInput()}
-          <Button type="submit" className="mt-6">
-            Generate
-          </Button>
+          <SubmitButton />
           {(error as Error).error && (
             <p className="text-destructive">{(error as Error).error}</p>
           )}
@@ -339,5 +338,15 @@ function CourseInfoInput({ error }: InputProps) {
         <p className="text-destructive">{error.courseName}</p>
       )}
     </>
+  );
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" className="mt-6" disabled={pending}>
+      {pending ? "Generating..." : "Generate"}
+    </Button>
   );
 }

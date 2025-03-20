@@ -33,19 +33,16 @@ async function getSubscriptions() {
 }
 
 async function getUsers() {
-  const [count, avgList] = await Promise.all([
+  const [count, sales] = await Promise.all([
     db.user.count(),
-    db.sale.groupBy({
-      by: ["userId"],
-      _avg: {
-        pricePaidInPennies: true,
-      },
+    db.sale.aggregate({
+      _sum: { pricePaidInPennies: true },
     }),
   ]);
+
   return {
     count,
-    averagePaid:
-      avgList.reduce((a, b) => a + (b._avg.pricePaidInPennies ?? 0), 0) / count,
+    averagePaid: (sales._sum.pricePaidInPennies ?? 0) / count,
   };
 }
 
@@ -86,7 +83,7 @@ export default async function AdminPage() {
           <p>Total Sales - {formatNumber(sales.count ?? 0)}</p>
         </DashboardComponent>
         <DashboardComponent
-          title="Subscriptions"
+          title="Active Subscriptions"
           icon={<Newspaper />}
           description=""
         >

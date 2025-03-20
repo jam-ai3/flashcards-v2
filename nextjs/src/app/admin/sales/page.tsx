@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSalesData, Sale } from "./_actions/data";
+import { getSalesData, getTotalSales, Sale } from "./_actions/data";
 import {
   Table,
   TableBody,
@@ -20,6 +20,7 @@ import TableFilters from "./_components/table-fiilters";
 export default function AdminSalesPage() {
   const page = Number(useSearchParams().get("page") ?? "1");
   const [sales, setSales] = useState<Sale[]>([]);
+  const [totalSales, setTotalSales] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
   const [productId, setProductId] = useState<string>("");
   const productIds = PRODUCTS_ARRAY.map((p) => p.id);
@@ -29,6 +30,10 @@ export default function AdminSalesPage() {
     getSalesData(productId, page)
       .then((sales) => setSales(sales))
       .finally(() => setIsLoading(false));
+  }, [productId, page]);
+
+  useEffect(() => {
+    getTotalSales(productId).then((totalSales) => setTotalSales(totalSales));
   }, [productId]);
 
   return (
@@ -45,7 +50,7 @@ export default function AdminSalesPage() {
         </div>
         {isLoading ? <Loading /> : <SalesTable sales={sales} />}
       </div>
-      <TableNavigation page={page} total={sales.length} route="/admin/sales" />
+      <TableNavigation page={page} total={totalSales} route="/admin/sales" />
     </div>
   );
 }

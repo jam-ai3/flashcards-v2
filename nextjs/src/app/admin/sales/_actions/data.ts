@@ -25,5 +25,16 @@ export async function getSalesData(productId: string, page: number = 1) {
     },
     take: TABLE_ROWS_PER_PAGE,
     skip: (page - 1) * TABLE_ROWS_PER_PAGE,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+}
+
+export async function getTotalSales(productId: string) {
+  return await db.sale.count({
+    where: {
+      productId: productId === "" ? undefined : productId,
+    },
   });
 }

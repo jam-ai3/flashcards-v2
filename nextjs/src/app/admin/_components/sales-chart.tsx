@@ -34,7 +34,7 @@ type SalesChart = {
 type GraphType = "product" | "month" | "";
 
 export default function SalesChart({ sales, className }: SalesChart) {
-  const [graphType, setGraphType] = useState<GraphType>("product");
+  const [graphType, setGraphType] = useState<GraphType>("month");
   const graphData = getGraphData(sales, graphType);
 
   return (

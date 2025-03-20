@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function AdminHeader() {
+  const pathname = usePathname();
+
   return (
     <nav className="flex justify-between w-full p-6 bg-secondary shadow">
       <Link href="/admin">
@@ -8,16 +13,54 @@ export default function AdminHeader() {
       </Link>
       <ul className="flex gap-6">
         <li>
-          <Link href="/admin">Dashboard</Link>
+          <Link href="/admin">
+            <span
+              className={
+                pathname === "/admin" ? "text-primary" : "text-muted-foreground"
+              }
+            >
+              Dashboard
+            </span>
+          </Link>
         </li>
         <li>
-          <Link href="/admin/customers">Customers</Link>
+          <Link href="/admin/customers">
+            <span
+              className={
+                pathname === "/admin/customers"
+                  ? "text-primary"
+                  : "text-muted-foreground"
+              }
+            >
+              Customers
+            </span>
+          </Link>
         </li>
         <li>
-          <Link href="/admin/sales">Sales</Link>
+          <Link href="/admin/sales">
+            <span
+              className={
+                pathname === "/admin/sales"
+                  ? "text-primary"
+                  : "text-muted-foreground"
+              }
+            >
+              Sales
+            </span>
+          </Link>
         </li>
         <li>
-          <Link href="/admin/logs">Logs</Link>
+          <Link href="/admin/logs">
+            <span
+              className={
+                pathname === "/admin/logs"
+                  ? "text-primary"
+                  : "text-muted-foreground"
+              }
+            >
+              Logs
+            </span>
+          </Link>
         </li>
       </ul>
     </nav>
