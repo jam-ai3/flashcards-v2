@@ -47,7 +47,7 @@ type GenerateFormProps = {
 
 export default function GenerateForm({ userId }: GenerateFormProps) {
   const [inputType, setInputType] = useState<InputType>("courseInfo");
-  const [error, action] = useActionState(
+  const [error, action, isPending] = useActionState(
     handleGenerate.bind(null, userId, inputType),
     {}
   );
@@ -105,7 +105,9 @@ export default function GenerateForm({ userId }: GenerateFormProps) {
       <CardContent>
         <form action={action} className="flex flex-col gap-2">
           {renderInput()}
-          <SubmitButton />
+          <Button type="submit" className="mt-6" disabled={isPending}>
+            {isPending ? "Generating..." : "Generate"}
+          </Button>
           {(error as Error).error && (
             <p className="text-destructive">{(error as Error).error}</p>
           )}
@@ -338,15 +340,5 @@ function CourseInfoInput({ error }: InputProps) {
         <p className="text-destructive">{error.courseName}</p>
       )}
     </>
-  );
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button type="submit" className="mt-6" disabled={pending}>
-      {pending ? "Generating..." : "Generate"}
-    </Button>
   );
 }
