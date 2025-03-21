@@ -48,6 +48,7 @@ class GenerateFlashcardsEndpoint:
         @app.route('/generate', methods=['POST'])
         @cross_origin(origins="*")
         def generate_flashcards():
+            print("In generating flashcards")
             data = request.json
             input_type = data['inputType']
             text = data['text']
