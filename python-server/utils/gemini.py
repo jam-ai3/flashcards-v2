@@ -107,6 +107,10 @@ def generate_flashcards_from_course_info(university: str, department: str, cours
 
 
 def get_output(prompt: str):
+<<<<<<< HEAD
+=======
+    # TODO: Improve error handling
+>>>>>>> fb4cf068e66af5fdd3233dbcd8e3495975475d32
     try:
         response = model.generate_content(prompt)
         output = remove_formatting(response.text.strip())
