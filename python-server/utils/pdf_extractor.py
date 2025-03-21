@@ -1,4 +1,3 @@
-import pymupdf4llm
 import fitz
 import os
 
