@@ -24,7 +24,7 @@ Content-Type: application/vnd.openxmlformats-officedocument.presentationml.prese
 ------WebKitFormBoundary--
 
 ###
-POST https://python-server-rosy.vercel.app/generate
+POST https://52.15.137.130/generate
 Content-Type: application/json
 
 {

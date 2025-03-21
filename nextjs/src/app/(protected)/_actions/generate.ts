@@ -1,10 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import { InputFormat, InputType } from "../_components/generate-form";
 import db from "@/db/db";
 import { Error, isError } from "@/lib/utils";
 import { redirect } from "next/navigation";
+import { InputFormat, InputType } from "@/lib/types";
 
 const generateSchema = z.object({
   format: z.enum(["text", "pdf", "pptx"]).default("text"),
