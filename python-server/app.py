@@ -3,10 +3,16 @@ from flask_cors import CORS
 import os
 import sys
 
-# Add parent directory to path (for util)
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# Add api directory to path
-sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'api'))
+# Get the directory containing app.py
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Add parent directory to path (for access to all project modules)
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+# Add specific directories to path
+sys.path.append(os.path.join(parent_dir, 'api'))
+sys.path.append(os.path.join(parent_dir, 'utils'))  # Add utils explicitly
 
 from api.endpoints import *
 

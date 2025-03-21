@@ -32,3 +32,6 @@ Content-Type: application/json
   "text": "{\"university\": \"USC\", \"department\": \"CSCE\", \"courseNumber\": 581, \"courseName\": \"Trusted AI\"}",
   "isFree": false
 }
+
+####
+GET https://52.15.137.130
